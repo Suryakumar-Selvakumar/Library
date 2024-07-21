@@ -1,0 +1,31 @@
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100%;
+}
+
+.container {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 0.5fr 0.5fr 7fr;
+  grid-template-areas: "heading" "new-book" "books";
+}
+
+h1 {
+  grid-area: heading;
+  justify-self: center;
+}
+
+.new-book-btn {
+  grid-area: new-book;
+  justify-self: end;
+  align-self: center;
+}
+
+.books {
+  grid-area: books;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  padding: 1rem 1rem;
+}
