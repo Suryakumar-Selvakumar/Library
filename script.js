@@ -96,38 +96,10 @@ form.addEventListener("formdata", (e) => {
   displayBook(myLibrary);
 });
 
-function deleteBook() {
-  const deleteBtns = [];
-  for (const div of books.children) {
-    deleteBtns.push(div.lastChild);
-  }
-
-  deleteBtns.forEach((item) =>
-    item.addEventListener("click", () => {
-      for (const div of books.children) {
-        if (div.dataset.index === item.dataset.btn) {
-          myLibrary.splice(div.dataset.index, 1);
-        }
-      }
-      displayBook(myLibrary);
-    })
-  );
-}
-
-const deleteBtns = [];
-for (const div of books.children) {
-  deleteBtns.push(div.lastChild);
-}
-
 books.addEventListener("click", (event) => {
   if (event.target.tagName === "BUTTON") {
-    deleteBtns.forEach((item) => {
-      for (const div of books.children) {
-        if (div.dataset.index === item.dataset.btn) {
-          myLibrary.splice(div.dataset.index, 1);
-        }
-      }
-      displayBook(myLibrary);
-    });
+    const index = event.target.getAttribute("data-btn");
+    myLibrary.splice(index, 1);
+    displayBook(myLibrary);
   }
 });
