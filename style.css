@@ -17,7 +17,7 @@ h1 {
   justify-self: center;
 }
 
-.new-book-btn {
+.new-book {
   grid-area: new-book;
   justify-self: end;
   align-self: center;
