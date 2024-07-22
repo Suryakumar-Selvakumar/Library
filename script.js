@@ -96,15 +96,38 @@ form.addEventListener("formdata", (e) => {
   displayBook(myLibrary);
 });
 
-for (const div of books.children) {
-  console.log(div.lastChild);
-  const deleteBtn = div.lastChild;
-  deleteBtn.addEventListener("click", () => {
-    for (const div of books.children) {
-      if (div.dataset.index === deleteBtn.dataset.btn) {
-        myLibrary.splice(div.dataset.index, 1);
+function deleteBook() {
+  const deleteBtns = [];
+  for (const div of books.children) {
+    deleteBtns.push(div.lastChild);
+  }
+
+  deleteBtns.forEach((item) =>
+    item.addEventListener("click", () => {
+      for (const div of books.children) {
+        if (div.dataset.index === item.dataset.btn) {
+          myLibrary.splice(div.dataset.index, 1);
+        }
       }
-    }
-    displayBook(myLibrary);
-  });
+      displayBook(myLibrary);
+    })
+  );
 }
+
+const deleteBtns = [];
+for (const div of books.children) {
+  deleteBtns.push(div.lastChild);
+}
+
+books.addEventListener("click", (event) => {
+  if (event.target.tagName === "BUTTON") {
+    deleteBtns.forEach((item) => {
+      for (const div of books.children) {
+        if (div.dataset.index === item.dataset.btn) {
+          myLibrary.splice(div.dataset.index, 1);
+        }
+      }
+      displayBook(myLibrary);
+    });
+  }
+});
