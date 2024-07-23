@@ -23,24 +23,36 @@ function displayBook(Library) {
   books.innerHTML = "";
   Library.forEach((book) => {
     const div = document.createElement("div");
-    div.textContent = `${book.bookName}`;
     div.setAttribute("data-index", Library.indexOf(book));
+    div.classList.add("book-card");
+
+    const paraBook = document.createElement("p");
+    paraBook.textContent = `${book.bookName}`;
+    const paraAuthor = document.createElement("p");
+    paraAuthor.textContent = `${book.author}`;
+
+    const divBook = document.createElement("div");
+    divBook.classList.add("div-book");
+    divBook.append(paraBook, paraAuthor);
 
     const deleteBtn = document.createElement("button");
     deleteBtn.setAttribute("type", "button");
-    deleteBtn.textContent = "Delete";
     deleteBtn.setAttribute("data-btn", Library.indexOf(book));
+    deleteBtn.classList.add("delete-btn");
+    deleteBtn.innerHTML =
+      "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 -2.5 24 24' width='30px' height='30px'><path d='M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19M8,9H16V19H8V9M15.5,4L14.5,3H9.5L8.5,4H5V6H19V4H15.5Z' fill='white'/></svg>";
 
-    const readStatusLabel = document.createElement("label");
-    readStatusLabel.setAttribute("for", "read-status-btn");
-    readStatusLabel.textContent = "Read?";
     const readStatusBtn = document.createElement("input");
     readStatusBtn.setAttribute("type", "checkbox");
     readStatusBtn.setAttribute("id", "read-status-btn");
     readStatusBtn.setAttribute("data-read-btn", Library.indexOf(book));
+    readStatusBtn.classList.add("read-btn");
 
-    div.append(readStatusLabel, readStatusBtn);
-    div.appendChild(deleteBtn);
+    const divBtns = document.createElement("div");
+    divBtns.classList.add("div-btns");
+    divBtns.append(readStatusBtn, deleteBtn);
+
+    div.append(divBook, divBtns);
     books.appendChild(div);
   });
 }
@@ -48,6 +60,7 @@ function displayBook(Library) {
 displayBook(myLibrary);
 
 const form = document.createElement("form");
+form.classList.add("add-book-form");
 
 const labelBookName = document.createElement("label");
 labelBookName.setAttribute("for", "book-name");
@@ -57,6 +70,9 @@ inputBookName.setAttribute("type", "text");
 inputBookName.setAttribute("id", "book-name");
 inputBookName.setAttribute("name", "book-name");
 
+const divBookInput = document.createElement("div");
+divBookInput.append(labelBookName, inputBookName);
+
 const labelAuthor = document.createElement("label");
 labelAuthor.setAttribute("for", "author");
 labelAuthor.textContent = "Author:";
@@ -65,11 +81,14 @@ inputAuthor.setAttribute("type", "text");
 inputAuthor.setAttribute("id", "author");
 inputAuthor.setAttribute("name", "author");
 
+const divAuthorInput = document.createElement("div");
+divAuthorInput.append(labelAuthor, inputAuthor);
+
 const btnSubmit = document.createElement("button");
 btnSubmit.setAttribute("type", "submit");
 btnSubmit.textContent = "Submit";
 
-form.append(labelBookName, inputBookName, labelAuthor, inputAuthor, btnSubmit);
+form.append(divBookInput, divAuthorInput, btnSubmit);
 
 addBook.addEventListener("click", () => {
   newBook.appendChild(form);
