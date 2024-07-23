@@ -3,13 +3,14 @@ const books = document.querySelector(".books");
 const newBook = document.querySelector(".new-book");
 const addBook = document.querySelector(".add-book-btn");
 
-function Book(bookName, readStatus) {
+function Book(bookName, author) {
   this.bookName = bookName;
-  this.readStatus = readStatus;
+  this.author = author;
+  this.readStatus = false;
 }
 
-const book1 = new Book("Dracula", true);
-const book2 = new Book("Dune", false);
+const book1 = new Book("Dracula", "Bram Stoker");
+const book2 = new Book("Dune", "Frank Herbert");
 
 function addBookToLibrary(book) {
   myLibrary.push(book);
@@ -30,6 +31,15 @@ function displayBook(Library) {
     deleteBtn.textContent = "Delete";
     deleteBtn.setAttribute("data-btn", Library.indexOf(book));
 
+    const readStatusLabel = document.createElement("label");
+    readStatusLabel.setAttribute("for", "read-status-btn");
+    readStatusLabel.textContent = "Read?";
+    const readStatusBtn = document.createElement("input");
+    readStatusBtn.setAttribute("type", "checkbox");
+    readStatusBtn.setAttribute("id", "read-status-btn");
+    readStatusBtn.setAttribute("data-read-btn", Library.indexOf(book));
+
+    div.append(readStatusLabel, readStatusBtn);
     div.appendChild(deleteBtn);
     books.appendChild(div);
   });
@@ -47,25 +57,19 @@ inputBookName.setAttribute("type", "text");
 inputBookName.setAttribute("id", "book-name");
 inputBookName.setAttribute("name", "book-name");
 
-const labelReadStatus = document.createElement("label");
-labelReadStatus.setAttribute("for", "read-status");
-labelReadStatus.textContent = "Read already?";
-const inputReadStatus = document.createElement("input");
-inputReadStatus.setAttribute("type", "checkbox");
-inputReadStatus.setAttribute("id", "read-status");
-inputReadStatus.setAttribute("name", "read-status");
+const labelAuthor = document.createElement("label");
+labelAuthor.setAttribute("for", "author");
+labelAuthor.textContent = "Author:";
+const inputAuthor = document.createElement("input");
+inputAuthor.setAttribute("type", "text");
+inputAuthor.setAttribute("id", "author");
+inputAuthor.setAttribute("name", "author");
 
 const btnSubmit = document.createElement("button");
 btnSubmit.setAttribute("type", "submit");
 btnSubmit.textContent = "Submit";
 
-form.append(
-  labelBookName,
-  inputBookName,
-  labelReadStatus,
-  inputReadStatus,
-  btnSubmit
-);
+form.append(labelBookName, inputBookName, labelAuthor, inputAuthor, btnSubmit);
 
 addBook.addEventListener("click", () => {
   newBook.appendChild(form);
@@ -81,17 +85,13 @@ form.addEventListener("submit", (event) => {
 form.addEventListener("formdata", (e) => {
   const data = e.formData;
   const dataArray = [];
-  let bookNameValue, readStatusValue;
+  let bookNameValue, AuthorValue;
   for (const value of data.values()) {
     dataArray.push(value);
   }
   bookNameValue = dataArray[0];
-  if (dataArray[1] === "on") {
-    readStatusValue = true;
-  } else {
-    readStatusValue = false;
-  }
-  const book = new Book(bookNameValue, readStatusValue);
+  AuthorValue = dataArray[1];
+  const book = new Book(bookNameValue, AuthorValue);
   addBookToLibrary(book);
   displayBook(myLibrary);
 });
@@ -101,5 +101,13 @@ books.addEventListener("click", (event) => {
     const index = event.target.getAttribute("data-btn");
     myLibrary.splice(index, 1);
     displayBook(myLibrary);
+  }
+  if (event.target.tagName === "INPUT") {
+    const index = event.target.getAttribute("data-read-btn");
+    if (event.target.checked) {
+      myLibrary[index].readStatus = true;
+    } else {
+      myLibrary[index].readStatus = false;
+    }
   }
 });
