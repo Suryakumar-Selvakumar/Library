@@ -3,14 +3,17 @@ const books = document.querySelector(".books");
 const newBook = document.querySelector(".new-book");
 const addBook = document.querySelector(".add-book-btn");
 
-function Book(bookName, author) {
+function Book(bookName, author, pages) {
   this.bookName = bookName;
   this.author = author;
+  this.pages = pages;
   this.readStatus = false;
 }
 
-const book1 = new Book("Dracula", "Bram Stoker");
-const book2 = new Book("Dune", "Frank Herbert");
+const book1 = new Book("Dracula", "Bram Stoker", 488);
+const book2 = new Book("Dune", "Frank Herbert", 412);
+const book3 = new Book("Atomic Habits", "James Clear", 320);
+const book4 = new Book("Where the Crawdads Sing", "Delia Owens", 384);
 
 function addBookToLibrary(book) {
   myLibrary.push(book);
@@ -18,34 +21,37 @@ function addBookToLibrary(book) {
 
 addBookToLibrary(book1);
 addBookToLibrary(book2);
+addBookToLibrary(book3);
+addBookToLibrary(book4);
 
 function displayBook(Library) {
   books.innerHTML = "";
   Library.forEach((book) => {
+    const index = Library.indexOf(book);
     const div = document.createElement("div");
-    div.setAttribute("data-index", Library.indexOf(book));
+    div.setAttribute("data-index", index);
     div.classList.add("book-card");
 
     const paraBook = document.createElement("p");
     paraBook.textContent = `${book.bookName}`;
     const paraAuthor = document.createElement("p");
     paraAuthor.textContent = `${book.author}`;
+    const paraPages = document.createElement("p");
+    paraPages.textContent = `${book.pages} pages`;
 
     const divBook = document.createElement("div");
     divBook.classList.add("div-book");
-    divBook.append(paraBook, paraAuthor);
+    divBook.append(paraBook, paraAuthor, paraPages);
 
     const deleteBtn = document.createElement("button");
     deleteBtn.setAttribute("type", "button");
-    deleteBtn.setAttribute("data-btn", Library.indexOf(book));
+    deleteBtn.setAttribute("data-btn", index);
     deleteBtn.classList.add("delete-btn");
-    deleteBtn.innerHTML =
-      "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 -2.5 24 24' width='30px' height='30px'><path d='M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19M8,9H16V19H8V9M15.5,4L14.5,3H9.5L8.5,4H5V6H19V4H15.5Z' fill='white'/></svg>";
 
     const readStatusBtn = document.createElement("input");
     readStatusBtn.setAttribute("type", "checkbox");
     readStatusBtn.setAttribute("id", "read-status-btn");
-    readStatusBtn.setAttribute("data-read-btn", Library.indexOf(book));
+    readStatusBtn.setAttribute("data-read-btn", index);
     readStatusBtn.classList.add("read-btn");
 
     const divBtns = document.createElement("div");
@@ -69,6 +75,7 @@ const inputBookName = document.createElement("input");
 inputBookName.setAttribute("type", "text");
 inputBookName.setAttribute("id", "book-name");
 inputBookName.setAttribute("name", "book-name");
+inputBookName.required = true;
 
 const divBookInput = document.createElement("div");
 divBookInput.append(labelBookName, inputBookName);
@@ -80,18 +87,47 @@ const inputAuthor = document.createElement("input");
 inputAuthor.setAttribute("type", "text");
 inputAuthor.setAttribute("id", "author");
 inputAuthor.setAttribute("name", "author");
+inputAuthor.required = true;
 
 const divAuthorInput = document.createElement("div");
 divAuthorInput.append(labelAuthor, inputAuthor);
+
+const labelPages = document.createElement("label");
+labelPages.setAttribute("for", "pages");
+labelPages.textContent = "No. of Pages:";
+const inputPages = document.createElement("input");
+inputPages.setAttribute("type", "tel");
+inputPages.setAttribute("id", "pages");
+inputPages.setAttribute("name", "pages");
+inputPages.required = true;
+inputPages.setAttribute("pattern", "^\\d*\\.?\\d+$");
+inputPages.setAttribute("title", "Pages are positive numbers!");
+
+const divPagesInput = document.createElement("div");
+divPagesInput.append(labelPages, inputPages);
 
 const btnSubmit = document.createElement("button");
 btnSubmit.setAttribute("type", "submit");
 btnSubmit.textContent = "Submit";
 
-form.append(divBookInput, divAuthorInput, btnSubmit);
+const btnCancel = document.createElement("button");
+btnCancel.setAttribute("type", "button");
+btnCancel.textContent = "Cancel";
+
+const divButtons = document.createElement("div");
+divButtons.append(btnCancel, btnSubmit);
+
+form.append(divBookInput, divAuthorInput, divPagesInput, divButtons);
 
 addBook.addEventListener("click", () => {
+  newBook.removeChild(addBook);
   newBook.appendChild(form);
+});
+
+btnCancel.addEventListener("click", () => {
+  form.reset();
+  newBook.removeChild(form);
+  newBook.appendChild(addBook);
 });
 
 form.addEventListener("submit", (event) => {
@@ -99,18 +135,20 @@ form.addEventListener("submit", (event) => {
   new FormData(form);
   form.reset();
   newBook.removeChild(form);
+  newBook.appendChild(addBook);
 });
 
 form.addEventListener("formdata", (e) => {
   const data = e.formData;
   const dataArray = [];
-  let bookNameValue, AuthorValue;
+  let bookNameValue, authorValue, pagesValue;
   for (const value of data.values()) {
     dataArray.push(value);
   }
   bookNameValue = dataArray[0];
-  AuthorValue = dataArray[1];
-  const book = new Book(bookNameValue, AuthorValue);
+  authorValue = dataArray[1];
+  pagesValue = dataArray[2];
+  const book = new Book(bookNameValue, authorValue, pagesValue);
   addBookToLibrary(book);
   displayBook(myLibrary);
 });
@@ -118,6 +156,7 @@ form.addEventListener("formdata", (e) => {
 books.addEventListener("click", (event) => {
   if (event.target.tagName === "BUTTON") {
     const index = event.target.getAttribute("data-btn");
+    console.log(index);
     myLibrary.splice(index, 1);
     displayBook(myLibrary);
   }
