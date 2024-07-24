@@ -53,6 +53,11 @@ function displayBook(Library) {
     readStatusBtn.setAttribute("id", "read-status-btn");
     readStatusBtn.setAttribute("data-read-btn", index);
     readStatusBtn.classList.add("read-btn");
+    if (book.readStatus === true) {
+      readStatusBtn.checked = true;
+    } else if (book.readStatus === false) {
+      readStatusBtn.checked = false;
+    }
 
     const divBtns = document.createElement("div");
     divBtns.classList.add("div-btns");
@@ -156,16 +161,16 @@ form.addEventListener("formdata", (e) => {
 books.addEventListener("click", (event) => {
   if (event.target.tagName === "BUTTON") {
     const index = event.target.getAttribute("data-btn");
-    console.log(index);
     myLibrary.splice(index, 1);
     displayBook(myLibrary);
   }
   if (event.target.tagName === "INPUT") {
     const index = event.target.getAttribute("data-read-btn");
-    if (event.target.checked) {
+    if (event.target.checked && myLibrary[index].readStatus === false) {
       myLibrary[index].readStatus = true;
-    } else {
+    } else if (myLibrary[index].readStatus === true) {
       myLibrary[index].readStatus = false;
     }
+    displayBook(myLibrary);
   }
 });
