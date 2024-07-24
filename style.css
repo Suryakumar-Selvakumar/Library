@@ -131,12 +131,14 @@ body {
 }
 
 .books {
+  box-shadow: inset 0 10px 10px rgb(51, 48, 48, 0.15);
+
   grid-area: books;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   grid-auto-rows: 350px;
-  padding: 1rem 1rem;
-  gap: 1rem;
+  padding: 2rem 1rem 1rem 1rem;
+  gap: 2rem;
   background-color: #f6fff8;
 }
 
@@ -147,6 +149,7 @@ body {
   justify-content: stretch;
   background-color: #cce3de;
   border-radius: 5px;
+  box-shadow: 3px 4px 10px 1px rgba(98, 93, 93, 1);
 }
 
 .div-book {
