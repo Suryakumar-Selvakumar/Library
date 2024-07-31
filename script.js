@@ -3,12 +3,16 @@ const books = document.querySelector(".books");
 const newBook = document.querySelector(".new-book");
 const addBook = document.querySelector(".add-book-btn");
 
-function Book(bookName, author, pages) {
-  this.bookName = bookName;
-  this.author = author;
-  this.pages = pages;
-  this.readStatus = false;
+
+class Book {
+  constructor(bookName, author, pages) {
+    this.bookName = bookName;
+    this.author = author;
+    this.pages = pages;
+    this.readStatus = false;
+  }
 }
+
 
 const book1 = new Book("Dracula", "Bram Stoker", 488);
 const book2 = new Book("Dune", "Frank Herbert", 412);
